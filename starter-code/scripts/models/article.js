@@ -70,13 +70,22 @@
       return article.body.split(' ').length;
     })
     // TODO: complete this reduce to get a grand total word count
-    .reduce(function() {
+    .reduce(function(a, b) {
+      return a + b;
     });
   };
 
   /* Chain together a `map` and a `reduce` call to
           produce an array of *unique* author names. */
   Article.allAuthors = function() {
+    return Article.allArticles.map(function(article){
+      return article.author;
+    }).reduce(function(pre, cur){
+      if(!pre.includes(cur)){
+        pre.push(cur);
+      }
+      return pre;
+    }, []);
   //return       TODO: map our collection
     //return    TODO: return just the author names
 
@@ -91,6 +100,14 @@
       the matching articles written by the specified author. */
     return Article.allAuthors().map(function(author) {
       return {
+        name: author,
+        numWords: Article.allArticles.filter(function(curArticle){
+          return curArticle.author === author;
+        }).map(function(article){
+          return article.body.split(' ').length;
+        }).reduce(function(a, b){
+          return a + b;
+        })
       /* TODO: complete these properties:
       name:
       numWords: someCollection.filter(function(curArticle) {
